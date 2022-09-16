@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Planet;
+use App\Http\Requests\PlanetRequest;
 
 class PlanetController extends Controller
 {
@@ -13,7 +14,8 @@ class PlanetController extends Controller
      */
     public function index()
     {
-        //
+        $planet = Planet::all();
+        return view('index', ['planets' => $planet]);
     }
 
     /**
@@ -23,7 +25,7 @@ class PlanetController extends Controller
      */
     public function create()
     {
-        //
+        return view('create');
     }
 
     /**
@@ -32,9 +34,18 @@ class PlanetController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PlanetRequest $request)
     {
-        //
+        $planet = new Planet;
+
+        $planet->name = $request->name;
+        $planet->en_name = $request->en_name;
+        $planet->radius = $request->radius;
+        $planet->weight = $request->weight;
+
+        $planet->save();
+
+        return redirect('/planet');
     }
 
     /**
@@ -45,7 +56,8 @@ class PlanetController extends Controller
      */
     public function show($id)
     {
-        //
+        $planet = Planet::find($id);
+        return view('show', ['planet' => $planet]);
     }
 
     /**
@@ -56,7 +68,8 @@ class PlanetController extends Controller
      */
     public function edit($id)
     {
-        //
+        $planet = Planet::find($id);
+        return view('edit', ['planet' => $planet]);
     }
 
     /**
@@ -66,9 +79,19 @@ class PlanetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PlanetRequest $request, $id)
     {
-        //
+
+        $planet = Planet::find($id);
+
+        $planet->name = $request->name;
+        $planet->en_name = $request->en_name;
+        $planet->radius = $request->radius;
+        $planet->weight = $request->weight;
+
+        $planet->save();
+
+        return redirect('/planet');
     }
 
     /**
@@ -79,6 +102,9 @@ class PlanetController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $planet = Planet::find($id);
+        $planet->delete();
+
+        return redirect('/planet');
     }
 }
